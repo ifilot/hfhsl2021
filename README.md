@@ -100,6 +100,13 @@ browse through the molecular orbitals.
 
 ![Molecular orbital visualized using Managlyph](img/managlyph_co.png)
 
+### Exercise 09: Final challenge, simulating CH4
+If you got to here, compliments! This is the final challenge. Here
+you are tasked to modify the script of the [previous exercise](../exercise08/ex08_solution.py) and 
+adapt it to perform a HF calculation in methane.
+
+[Go to exercise 9](exercise09)
+
 ## License
 The Python files are distributed under the [GPLv3 license](LICENSE). All written
 texts that accompany the scripts are distributed under the 
