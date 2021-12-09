@@ -25,7 +25,7 @@ import os
 
 def main():
     nuclei, cgfs, coeff, energies = calculate_co()
-    build_abo('co.abo', nuclei, cgfs, coeff, energies, 0.1)
+    build_abo('co.abo', nuclei, cgfs, coeff, energies, 0.03)
 
 def build_abo(outfile, nuclei, cgfs, coeff, energies, isovalue):
     """
@@ -72,7 +72,7 @@ def build_abo(outfile, nuclei, cgfs, coeff, energies, isovalue):
     f.write(len(nuclei).to_bytes(2, byteorder='little'))
     for atom in nuclei:
         f.write(element(atom[1]).atomic_number.to_bytes(1, byteorder='little'))
-        f.write(np.array(atom[0], dtype=np.float32).tobytes())
+        f.write(np.array(atom[0] * 0.529177, dtype=np.float32).tobytes())
 
     # write number of models
     f.write(int(0).to_bytes(1, byteorder='little'))
@@ -97,7 +97,7 @@ def build_abo(outfile, nuclei, cgfs, coeff, energies, isovalue):
         f.write(len(nuclei).to_bytes(2, byteorder='little'))
         for atom in nuclei:
             f.write(element(atom[1]).atomic_number.to_bytes(1, byteorder='little'))
-            f.write(np.array(atom[0], dtype=np.float32).tobytes())
+            f.write(np.array(atom[0] * 0.529177, dtype=np.float32).tobytes())
 
         print('Writing MO #%02i' % i)
 
@@ -110,13 +110,13 @@ def build_abo(outfile, nuclei, cgfs, coeff, energies, isovalue):
             scalarfield = np.reshape(integrator.plot_wavefunction(grid, coeff[:,i-1], cgfs), (sz, sz, sz))
             unitcell = np.diag(np.ones(3) * 10.0)
             vertices, normals, indices = pytessel.marching_cubes(scalarfield.flatten(), scalarfield.shape, unitcell.flatten(), isovalue if j==1 else -isovalue)
-            vertices_normals = np.hstack([vertices, normals])
+            vertices_normals = np.hstack([vertices * 0.529177, normals])
             
             # write model idx
             f.write(j.to_bytes(2, byteorder='little'))
             
             # write model color
-            if i < nelec / 2:
+            if i <= nelec / 2:
                 color = np.array(colors[j])
             else:
                 color = np.array(colors[j+2])
